@@ -1,8 +1,21 @@
 from langchain_community.chat_models import ChatOpenAI
 from typing import Optional, Any
 import os
+from dotenv import load_dotenv
 
-os.environ["OPENROUTER_API_KEY"] = "YOUR_API_KEY_HERE"
+# This loads the variables from the .env file into your environment
+load_dotenv()
+# Grab the key
+api_key = os.getenv("OPENROUTER_API_KEY")
+
+# --- THE TRIPWIRE ---
+if not api_key or api_key == "YOUR_API_KEY_HERE":
+    raise ValueError("🛑 STOP: The real API key was not found! Python cannot see your .env file.")
+else:
+    print("✅ SUCCESS: The real API key was loaded successfully!")
+
+# --- ADD THIS NEW LINE ---
+os.environ["OPENAI_API_KEY"] = api_key
 
 class ChatModel(ChatOpenAI):
     """
